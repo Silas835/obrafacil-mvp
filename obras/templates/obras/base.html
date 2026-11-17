@@ -1,0 +1,419 @@
+{% load static %}
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}ObraFácil{% endblock %}</title>
+
+    <style>
+      :root {
+        --primary: #244b3b;
+        --primary-dark: #18372c;
+        --background: #f4f6f5;
+        --surface: #ffffff;
+        --text: #26332d;
+        --muted: #68756e;
+        --border: #dfe6e1;
+        --success: #217a4b;
+        --danger: #b33b3b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--background);
+        color: var(--text);
+        line-height: 1.6;
+      }
+
+      a {
+        color: var(--primary);
+      }
+
+      a:focus-visible,
+      button:focus-visible,
+      input:focus-visible,
+      select:focus-visible {
+        outline: 3px solid #e5a400;
+        outline-offset: 3px;
+      }
+
+      .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        background: white;
+        padding: 12px;
+        z-index: 100;
+      }
+
+      .skip-link:focus {
+        left: 10px;
+      }
+
+      .topbar {
+        background: var(--primary);
+        color: white;
+        padding: 14px 5%;
+      }
+
+      .topbar-content {
+        max-width: 1200px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .brand {
+        color: white;
+        font-size: 25px;
+        font-weight: bold;
+        text-decoration: none;
+      }
+
+      .navigation {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .navigation a {
+        color: white;
+        text-decoration: none;
+      }
+
+      .navigation form {
+        margin: 0;
+      }
+
+      .accessibility {
+        display: flex;
+        gap: 8px;
+        max-width: 1200px;
+        margin: 12px auto 0;
+        padding: 0 5%;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      }
+
+      .accessibility button {
+        border: 1px solid var(--border);
+        background: var(--surface);
+        color: var(--text);
+        padding: 8px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      main {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 0 5%;
+        min-height: 65vh;
+      }
+
+      h1,
+      h2,
+      h3 {
+        line-height: 1.25;
+      }
+
+      .page-heading {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 22px;
+        margin-bottom: 18px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 25px;
+      }
+
+      .stat-value {
+        font-size: 24px;
+        font-weight: bold;
+        overflow-wrap: anywhere;
+      }
+
+      .stat-label {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .button {
+        display: inline-block;
+        padding: 11px 17px;
+        border-radius: 7px;
+        background: var(--primary);
+        color: white;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        font-size: 15px;
+      }
+
+      .button:hover {
+        background: var(--primary-dark);
+      }
+
+      .button-secondary {
+        background: #e9efeb;
+        color: var(--primary-dark);
+      }
+
+      .button-danger {
+        background: var(--danger);
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 11px;
+        border: 1px solid #aebbb2;
+        border-radius: 6px;
+        font: inherit;
+        background: white;
+        color: #222;
+      }
+
+      .form-field {
+        margin-bottom: 18px;
+      }
+
+      .form-field label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+      }
+
+      .errorlist {
+        color: var(--danger);
+        padding-left: 20px;
+      }
+
+      .table-wrapper {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+      }
+
+      th,
+      td {
+        padding: 13px;
+        text-align: left;
+        border-bottom: 1px solid var(--border);
+      }
+
+      th {
+        background: #eef2ef;
+      }
+
+      .positive {
+        color: var(--success);
+        font-weight: bold;
+      }
+
+      .negative {
+        color: var(--danger);
+        font-weight: bold;
+      }
+
+      .status {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 30px;
+        background: #e9efeb;
+        font-size: 13px;
+      }
+
+      .messages {
+        list-style: none;
+        padding: 0;
+      }
+
+      .messages li {
+        background: #e1f2e7;
+        border-left: 4px solid var(--success);
+        padding: 12px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+      }
+
+      .footer {
+        text-align: center;
+        padding: 25px;
+        color: var(--muted);
+        border-top: 1px solid var(--border);
+      }
+
+      /* Recurso de acessibilidade: alto contraste */
+      html.alto-contraste {
+        --primary: #000000;
+        --primary-dark: #000000;
+        --background: #000000;
+        --surface: #111111;
+        --text: #ffffff;
+        --muted: #eeeeee;
+        --border: #ffffff;
+        --success: #7dff9b;
+        --danger: #ff8585;
+      }
+
+      html.alto-contraste .topbar {
+        border-bottom: 2px solid white;
+      }
+
+      html.alto-contraste .button {
+        background: #ffff00;
+        color: #000000;
+        border: 1px solid white;
+        font-weight: bold;
+      }
+
+      html.alto-contraste .form-control {
+        background: #000000;
+        color: #ffffff;
+        border: 2px solid #ffffff;
+      }
+
+      html.alto-contraste th {
+        background: #333333;
+      }
+
+      html.alto-contraste a {
+        color: #ffff00;
+      }
+
+      html.alto-contraste .navigation a,
+      html.alto-contraste .brand {
+        color: #ffffff;
+      }
+
+      html.texto-ampliado {
+        font-size: 120%;
+      }
+
+      @media (max-width: 800px) {
+        .stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 500px) {
+        .stats {
+          grid-template-columns: 1fr;
+        }
+
+        .topbar-content {
+          align-items: flex-start;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo principal</a>
+
+    <header class="topbar">
+      <div class="topbar-content">
+        <a href="{% url 'painel' %}" class="brand">ObraFácil</a>
+
+        <nav class="navigation" aria-label="Navegação principal">
+          {% if user.is_authenticated %}
+          <a href="{% url 'painel' %}">Painel</a>
+          <a href="{% url 'nova_obra' %}">Nova obra</a>
+          <span>Olá, {{ user.username }}</span>
+
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="button button-secondary" type="submit">Sair</button>
+          </form>
+          {% else %}
+          <a href="{% url 'login' %}">Entrar</a>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
+
+    <div class="accessibility" aria-label="Recursos de acessibilidade">
+      <button type="button" id="contraste" aria-pressed="false">
+        Alto contraste
+      </button>
+
+      <button type="button" id="texto" aria-pressed="false">
+        Aumentar texto
+      </button>
+    </div>
+
+    <main id="conteudo" tabindex="-1">
+      {% if messages %}
+      <ul class="messages" aria-live="polite">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %} {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+      ObraFácil — Gestão simples e organizada de obras.
+    </footer>
+
+    <script>
+      const contraste = document.getElementById("contraste");
+      const texto = document.getElementById("texto");
+
+      function aplicarContraste(ativo) {
+        document.documentElement.classList.toggle("alto-contraste", ativo);
+        contraste.setAttribute("aria-pressed", String(ativo));
+        localStorage.setItem("obrafacil-contraste", String(ativo));
+      }
+
+      function aplicarTexto(ativo) {
+        document.documentElement.classList.toggle("texto-ampliado", ativo);
+        texto.setAttribute("aria-pressed", String(ativo));
+        localStorage.setItem("obrafacil-texto", String(ativo));
+      }
+
+      aplicarContraste(localStorage.getItem("obrafacil-contraste") === "true");
+      aplicarTexto(localStorage.getItem("obrafacil-texto") === "true");
+
+      contraste.addEventListener("click", function () {
+        aplicarContraste(
+          !document.documentElement.classList.contains("alto-contraste"),
+        );
+      });
+
+      texto.addEventListener("click", function () {
+        aplicarTexto(
+          !document.documentElement.classList.contains("texto-ampliado"),
+        );
+      });
+    </script>
+  </body>
+</html>
