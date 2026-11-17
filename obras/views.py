@@ -125,3 +125,8 @@ def editar_lancamento(request, lancamento_id):
         "obra": lancamento.obra,
         "titulo": "Editar lançamento financeiro",
     })
+
+
+def saude(request):
+    from django.http import HttpResponse
+    return HttpResponse("ok")

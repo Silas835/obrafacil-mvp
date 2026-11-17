@@ -2,6 +2,8 @@ from django import forms
 
 from .models import Obra, LancamentoFinanceiro
 
+FORMATO_DATA = "%Y-%m-%d"
+
 
 class ObraForm(forms.ModelForm):
     class Meta:
@@ -23,10 +25,12 @@ class ObraForm(forms.ModelForm):
             "tipo_servico": forms.Select(attrs={"class": "form-control"}),
             "status": forms.Select(attrs={"class": "form-control"}),
             "data_inicio": forms.DateInput(
-                attrs={"class": "form-control", "type": "date"}
+                format=FORMATO_DATA,
+                attrs={"class": "form-control", "type": "date"},
             ),
             "data_prevista_fim": forms.DateInput(
-                attrs={"class": "form-control", "type": "date"}
+                format=FORMATO_DATA,
+                attrs={"class": "form-control", "type": "date"},
             ),
         }
 
@@ -50,6 +54,7 @@ class LancamentoFinanceiroForm(forms.ModelForm):
                 attrs={"class": "form-control", "min": "0.01", "step": "0.01"}
             ),
             "data": forms.DateInput(
-                attrs={"class": "form-control", "type": "date"}
+                format=FORMATO_DATA,
+                attrs={"class": "form-control", "type": "date"},
             ),
         }
