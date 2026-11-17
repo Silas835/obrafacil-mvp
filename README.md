@@ -1,2 +1,3 @@
-# obrafacil-mvp
-MVP de sistema web de gestão de obras para pequenas construtoras
+.env
+db.sqlite3
+.venv/
