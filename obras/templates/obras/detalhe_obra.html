@@ -1,0 +1,103 @@
+{% extends "obras/base.html" %} {% block title %}{{ obra.nome }} | ObraFácil{% endblock %} {% block content %}
+<div class="page-heading">
+  <div>
+    <h1>{{ obra.nome }}</h1>
+    <p>{{ obra.get_tipo_servico_display }} — {{ obra.get_status_display }}</p>
+  </div>
+
+  <a href="{% url 'novo_lancamento' obra.id %}" class="button">
+    + Novo lançamento
+  </a>
+</div>
+
+<div class="card">
+  <h2>Informações da obra</h2>
+
+  <p><strong>Cliente:</strong> {{ obra.cliente|default:"Não informado" }}</p>
+  <p><strong>Local:</strong> {{ obra.local|default:"Não informado" }}</p>
+  <p><strong>Data de início:</strong> {{ obra.data_inicio|date:"d/m/Y" }}</p>
+
+  <p>
+    <strong>Previsão de término:</strong>
+    {% if obra.data_prevista_fim %} {{ obra.data_prevista_fim|date:"d/m/Y" }} {% else %} Não informada {% endif %}
+  </p>
+</div>
+
+<section class="stats" aria-label="Resumo financeiro da obra">
+  <article class="card">
+    <div class="stat-label">Receitas</div>
+    <div class="stat-value positive">
+      R$ {{ resumo.receitas|floatformat:2 }}
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="stat-label">Despesas</div>
+    <div class="stat-value negative">
+      R$ {{ resumo.despesas|floatformat:2 }}
+    </div>
+  </article>
+
+  <article class="card">
+    <div class="stat-label">Saldo</div>
+    <div class="stat-value">R$ {{ resumo.saldo|floatformat:2 }}</div>
+  </article>
+</section>
+
+<section class="card">
+  <h2>Histórico financeiro</h2>
+
+  {% if lancamentos %}
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th>
+          <th>Tipo</th>
+          <th>Categoria</th>
+          <th>Descrição</th>
+          <th>Valor</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for lancamento in lancamentos %}
+        <tr>
+          <td>{{ lancamento.data|date:"d/m/Y" }}</td>
+
+          <td>{{ lancamento.get_tipo_display }}</td>
+
+          <td>{{ lancamento.get_categoria_display }}</td>
+
+          <td>{{ lancamento.descricao }}</td>
+
+          <td>
+            {% if lancamento.tipo == "receita" %}
+            <span class="positive">
+              + R$ {{ lancamento.valor|floatformat:2 }}
+            </span>
+            {% else %}
+            <span class="negative">
+              - R$ {{ lancamento.valor|floatformat:2 }}
+            </span>
+            {% endif %}
+          </td>
+
+          <td>
+            <a href="{% url 'editar_lancamento' lancamento.id %}"> Editar </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p>Nenhuma movimentação financeira registrada nesta obra.</p>
+  {% endif %}
+</section>
+
+<a href="{% url 'painel' %}" class="button button-secondary">
+  Voltar ao painel
+</a>
+{% endblock %}

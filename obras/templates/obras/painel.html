@@ -1,0 +1,80 @@
+{% extends "obras/base.html" %} {% block title %}Painel | ObraFácil{% endblock %} {% block content %}
+<div class="page-heading">
+  <div>
+    <h1>Painel de controle</h1>
+    <p>Acompanhe suas obras e sua situação financeira.</p>
+  </div>
+
+  <a href="{% url 'nova_obra' %}" class="button"> + Cadastrar obra </a>
+</div>
+
+<section class="stats" aria-label="Resumo financeiro geral">
+  <article class="card">
+    <div class="stat-label">Obras cadastradas</div>
+    <div class="stat-value">{{ quantidade_obras }}</div>
+  </article>
+
+  <article class="card">
+    <div class="stat-label">Receitas totais</div>
+    <div class="stat-value positive">R$ {{ total_receitas|floatformat:2 }}</div>
+  </article>
+
+  <article class="card">
+    <div class="stat-label">Despesas totais</div>
+    <div class="stat-value negative">R$ {{ total_despesas|floatformat:2 }}</div>
+  </article>
+
+  <article class="card">
+    <div class="stat-label">Saldo geral</div>
+    <div class="stat-value">R$ {{ saldo_geral|floatformat:2 }}</div>
+  </article>
+</section>
+
+<section class="card">
+  <h2>Minhas obras</h2>
+
+  {% if obras %}
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Obra</th>
+          <th>Cliente</th>
+          <th>Status</th>
+          <th>Receitas</th>
+          <th>Despesas</th>
+          <th>Saldo</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for item in obras %}
+        <tr>
+          <td>
+            <a href="{% url 'detalhe_obra' item.obra.id %}">
+              {{ item.obra.nome }}
+            </a>
+          </td>
+
+          <td>{{ item.obra.cliente|default:"Não informado" }}</td>
+
+          <td>
+            <span class="status"> {{ item.obra.get_status_display }} </span>
+          </td>
+
+          <td>R$ {{ item.resumo.receitas|floatformat:2 }}</td>
+          <td>R$ {{ item.resumo.despesas|floatformat:2 }}</td>
+          <td>R$ {{ item.resumo.saldo|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p>Você ainda não cadastrou nenhuma obra.</p>
+  <a href="{% url 'nova_obra' %}" class="button">
+    Cadastrar minha primeira obra
+  </a>
+  {% endif %}
+</section>
+{% endblock %}

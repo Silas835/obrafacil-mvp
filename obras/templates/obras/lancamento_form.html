@@ -1,0 +1,23 @@
+{% extends "obras/base.html" %} {% block title %}{{ titulo }} | ObraFácil{% endblock %} {% block content %}
+<div class="card">
+  <h1>{{ titulo }}</h1>
+
+  <p>Obra: <strong>{{ obra.nome }}</strong></p>
+
+  <form method="post">
+    {% csrf_token %} {{ form.non_field_errors }} {% for field in form %}
+    <div class="form-field">
+      <label for="{{ field.id_for_label }}"> {{ field.label }} </label>
+
+      {{ field }} {{ field.errors }}
+    </div>
+    {% endfor %}
+
+    <button type="submit" class="button">Salvar lançamento</button>
+
+    <a href="{% url 'detalhe_obra' obra.id %}" class="button button-secondary">
+      Cancelar
+    </a>
+  </form>
+</div>
+{% endblock %}

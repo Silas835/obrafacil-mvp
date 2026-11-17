@@ -1,0 +1,22 @@
+{% extends "obras/base.html" %} {% block title %}{{ titulo }} | ObraFácil{% endblock %} {% block content %}
+<div class="card">
+  <h1>{{ titulo }}</h1>
+  <p>Preencha as informações para cadastrar sua obra.</p>
+
+  <form method="post">
+    {% csrf_token %} {{ form.non_field_errors }} {% for field in form %}
+    <div class="form-field">
+      <label for="{{ field.id_for_label }}"> {{ field.label }} </label>
+
+      {{ field }} {% if field.help_text %}
+      <small>{{ field.help_text }}</small>
+      {% endif %} {{ field.errors }}
+    </div>
+    {% endfor %}
+
+    <button type="submit" class="button">Salvar obra</button>
+
+    <a href="{% url 'painel' %}" class="button button-secondary"> Cancelar </a>
+  </form>
+</div>
+{% endblock %}

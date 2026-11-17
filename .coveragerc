@@ -1,0 +1,6 @@
+[run]
+source = obras
+omit =
+    */migrations/*
+    */tests.py
+    
